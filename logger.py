@@ -14,8 +14,7 @@ if not os.path.exists(logPath):
 logFile = os.path.join(logPath, 'log' + timestamp() + '.txt')
 
 
-def log(msg):
-    print(msg)
+def log(tag, msg=""):
     with(open(logFile, 'a')) as f:
         f.write(timestamp() + '\t')
-        f.write(str(msg) + '\n')
+        f.write(tag + str(msg) + '\n')

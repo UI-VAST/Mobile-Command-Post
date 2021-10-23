@@ -1,6 +1,6 @@
 #!/usr/bin/python
 from logger import *
-from Iridium import iridium
+from Iridium import Iridium
 import time
 
 # program to automatically transmit data over iridium network.
@@ -24,7 +24,7 @@ dest = "RB0012851"
 port = "/dev/serial0"
 baud = 19200
 
-ir = iridium.Iridium(port, baud)
+ir = Iridium(port, baud)
 
 log("session started at " + timestamp())
 
