@@ -1,5 +1,5 @@
 #!/usr/bin/python
-import os
+import os, sys
 import time
 import argparse
 from binascii import hexlify
@@ -8,22 +8,21 @@ from Iridium import Iridium, timestamp
 
 
 parser = argparse.ArgumentParser(description='RockBlock automated interface for python systems.')
-parser.add_argument("-i", "--id", type=str, default="12851", help="RockBlock id for sending messages to.")
+parser.add_argument("-i", "--id", type=int, default="12851", help="RockBlock id for sending messages to.")
 parser.add_argument("-p", "--port", type=str, default="/dev/serial0", help="The port the RockBlock is connected to. Default: /dev/serial0")
 parser.add_argument("-b", "--baud", type=int, default=19200, help="The baud rate for the RockBlock. Default: 19200")
 parser.add_argument("-t", "--timer", type=int, default=120, help="The time between RockBlock messages. (seconds) Default: 120")
 parser.add_argument("-d", "--debug", type=bool, default=False, help="Enables debugging prints for the RockBlock. Default: False")
 args = parser.parse_args()
-print(args["timer"])
 
 
 # program to automatically transmit data over iridium network.
 
-transmissionTime = 120
+transmissionTime = args.timer
 countdown = 90
-dest = "RB0012851"
-port = "/dev/serial0"
-baud = 19200
+dest = "RB{0:07d}".format(args.id)
+port = args.port
+baud = args.baud
 
 ir = Iridium(port, baud)
 
