@@ -24,7 +24,7 @@ dest = "RB{0:07d}".format(args.id)
 port = args.port
 baud = args.baud
 
-ir = Iridium(port, baud)
+ir = Iridium(port, baud, debug=args.debug)
 
 
 # ir.listen() begins the listener on a separate thread.
