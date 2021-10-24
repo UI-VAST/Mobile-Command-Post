@@ -15,7 +15,7 @@ import threading
 class Iridium:
     def __init__(self, port, baud, debug=False):
         self.logger = Logger(debug)
-        self.logger.log("Initiating Rock Block with " + port + ", " + baud + ", and debugging " + debug)
+        self.logger.log("Initiating Rock Block with " + str(port) + ", " + str(baud) + ", and debugging " + str(debug))
         self.port = serial.Serial(port, baudrate=baud, timeout=5)
         self.port.reset_input_buffer()
         self.port.flush()
