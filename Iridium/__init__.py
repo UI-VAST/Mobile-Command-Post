@@ -29,7 +29,7 @@ class Iridium:
 
     # just writes to serial port
     def write(self, msg):
-        self.logger.log("Message: ", msg, self.debug)
+        self.logger.log("Message: ", msg)
         self.port.write(msg)
 
     # writes message to outgoing buffer

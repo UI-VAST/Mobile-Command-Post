@@ -8,11 +8,11 @@ from Iridium import Iridium, timestamp
 
 
 parser = argparse.ArgumentParser(description='RockBlock automated interface for python systems.')
-parser.add_argument("-d", "--destination", type=str, default="12851", help="RockBlock id for sending messages to.")
+parser.add_argument("-i", "--id", type=str, default="12851", help="RockBlock id for sending messages to.")
 parser.add_argument("-p", "--port", type=str, default="/dev/serial0", help="The port the RockBlock is connected to. Default: /dev/serial0")
 parser.add_argument("-b", "--baud", type=int, default=19200, help="The baud rate for the RockBlock. Default: 19200")
 parser.add_argument("-t", "--timer", type=int, default=120, help="The time between RockBlock messages. (seconds) Default: 120")
-parser.add_argument("--debug", type=bool, default=False, help="Enables debugging prints for the RockBlock.")
+parser.add_argument("-d", "--debug", type=bool, default=False, help="Enables debugging prints for the RockBlock. Default: False")
 print(parser.parse_args())
 
 
