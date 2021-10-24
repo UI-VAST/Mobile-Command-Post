@@ -13,7 +13,8 @@ parser.add_argument("-p", "--port", type=str, default="/dev/serial0", help="The 
 parser.add_argument("-b", "--baud", type=int, default=19200, help="The baud rate for the RockBlock. Default: 19200")
 parser.add_argument("-t", "--timer", type=int, default=120, help="The time between RockBlock messages. (seconds) Default: 120")
 parser.add_argument("-d", "--debug", type=bool, default=False, help="Enables debugging prints for the RockBlock. Default: False")
-print(parser.parse_args())
+args = parser.parse_args()
+print(args["timer"])
 
 
 # program to automatically transmit data over iridium network.
