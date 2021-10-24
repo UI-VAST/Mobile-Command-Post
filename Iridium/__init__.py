@@ -13,7 +13,9 @@ import threading
 
 # Iridium class:
 class Iridium:
-    def __init__(self, port, baud):
+    def __init__(self, port, baud, debug=False):
+        self.logger = Logger(debug)
+        self.logger.log("Initiating Rock Block with " + port + ", " + baud + ", and debugging " + debug)
         self.port = serial.Serial(port, baudrate=baud, timeout=5)
         self.port.reset_input_buffer()
         self.port.flush()
@@ -27,7 +29,7 @@ class Iridium:
 
     # just writes to serial port
     def write(self, msg):
-        log("Message: ", msg)
+        self.logger.log("Message: ", msg, self.debug)
         self.port.write(msg)
 
     # writes message to outgoing buffer
@@ -40,7 +42,7 @@ class Iridium:
 
     # initiate SBD session
     def SBDI(self, alert=False):
-        log("Initiating Session....")
+        self.logger.log("Initiating Session....")
         if alert:
             self.write(bytes("AT+SBDIXA\r\n", "utf-8"))
         else:
@@ -72,7 +74,7 @@ class Iridium:
         return self.port.in_waiting
 
     def CheckMessages(self):
-        log("Listener Started")
+        self.logger.log("Listener Started")
         # infinite loop running in second thread
         while 1:
             # print('reading')
@@ -80,46 +82,48 @@ class Iridium:
                 r = []
                 print("Reading...")
                 while self.available() > 0:
-                    r.append(self.read().decode("utf-8"))
+                    temp = self.read()
+                    print(type(temp))
+                    r.append(temp.decode())
                 self.ProcessPacket(r)
             time.sleep(1)
 
     def ProcessPacket(self, packet):
-        log("packet:", packet)
+        self.logger.log("packet:", packet)
         print(packet)
         for i, p in enumerate(packet):
             if "CSQ:" in p:
                 self.sq = int(p[5])
-                log("Signal Quality: ", self.sq)  # every time a csq packet comes in,  # check sq again.  # self.csq()
+                self.logger.log("Signal Quality: ", self.sq)  # every time a csq packet comes in,  # check sq again.  # self.csq()
 
             if "SBDIX:" in p:
                 response = p.split(":")[1].split(",")
                 mo = response[0]
                 mt = response[2]
-                log("mo: ", mo)
-                log("mt: ", mt)
+                self.logger.log("mo: ", mo)
+                self.logger.log("mt: ", mt)
                 if int(mo) > 4:
                     self.SBDI()
-                    log("Message not sent. Trying again...")
+                    self.logger.log("Message not sent. Trying again...")
                 else:
-                    log("Message Sent")
+                    self.logger.log("Message Sent")
                     self.write(bytes("AT+SBDD0\r\n", "utf-8"))
                     time.sleep(1)  # self.csq()
                 if int(mt) > 1:
                     self.SBDI(alert=True)
-                    log("No service. Trying again...")
+                    self.logger.log("No service. Trying again...")
                 elif int(mt) == 1:
-                    log("Message Received")
+                    self.logger.log("Message Received")
                     self.SBDRT()
                 else:
-                    log("No messages at gateway.")
+                    self.logger.log("No messages at gateway.")
             if "SBDWT" in p:
                 self.SBDI()
             if "SBDRING" in p:
-                log("Ringing: ", p)
+                self.logger.log("Ringing: ", p)
                 self.SBDI(alert=True)
             if "SBDRT:" in p:
-                log("Message Received\n", packet[i + 1])
+                self.logger.log("Message Received\n", packet[i + 1])
                 self.LastMessage = packet[i + 1]
                 self.write(bytes("AT+SBDD1\r\n", "utf-8"))
                 time.sleep(1)
