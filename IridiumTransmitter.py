@@ -2,7 +2,6 @@
 from logger import *
 from Iridium import Iridium
 import time
-import argparse
 
 # program to automatically transmit data over iridium network.
 
@@ -17,14 +16,6 @@ import argparse
 
     handle receiving of cutdown command.
 '''
-
-parser = argparse.ArgumentParser(description='RockBlock automated interface for python systems.')
-parser.add_argument("destination", type=str, required=False, help="RockBlock id for sending messages to.")
-parser.add_argument("port", type=str, required=False, help="The port the RockBlock is connected to. Default: /dev/serial0")
-parser.add_argument("port", type=int, required=False, help="The baud rate for the RockBlock. Default: 19200")
-parser.add_argument("timer", type=int, required=False, help="The time between RockBlock messages. (seconds) Default: 120")
-parser.add_argument("debug", type=bool, required=False, help="Enables debugging prints for the RockBlock.")
-print(parser.parse_args())
 
 transmissionTime = 120
 countdown = 90
@@ -43,7 +34,7 @@ latestGPS = ""
 ir.listen()
 
 packet = ''
-messagePending = True
+messagePending = False
 while 1:
     # when transmissionTime seconds have passed, do the thing.
     # and reset countdown timer
