@@ -83,7 +83,6 @@ class Iridium:
                 print("Reading...")
                 while self.available() > 0:
                     temp = self.read()
-                    print(type(temp))
                     r.append(temp.decode())
                 self.ProcessPacket(r)
             time.sleep(1)
@@ -102,7 +101,7 @@ class Iridium:
                 mt = response[2]
                 self.logger.log("mo: ", mo)
                 self.logger.log("mt: ", mt)
-                if int(mo) > 4:
+                if int(mo) > 2:
                     self.SBDI()
                     self.logger.log("Message not sent. Trying again...")
                 else:
