@@ -132,7 +132,7 @@ class IridiumManager:
         self.port = port
         self.baud = baud
         self.sender = dest != 0
-        self.ir = Iridium(self.port, self.port, debug=debug)
+        self.ir = Iridium(self.port, self.baud, debug=debug)
         self.ir.logger.log("Send mode is {0}.".format("enabled" if self.sender else "disabled"))
         self.ir.listen()
         self.reader()
