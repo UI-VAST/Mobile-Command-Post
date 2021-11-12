@@ -79,7 +79,9 @@ def create_app():
         db.init_app(app)
         db.create_all()
 
+        print("Starting Iridium Package.")
         IridiumManager()
+        print("Iridium Package Started.")
 
         from SatComm.view import view
         app.register_blueprint(view)
