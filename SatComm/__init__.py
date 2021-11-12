@@ -79,7 +79,7 @@ def create_app():
         db.init_app(app)
         db.create_all()
 
-        IridiumManager
+        IridiumManager()
 
         from SatComm.view import view
         app.register_blueprint(view)
