@@ -80,7 +80,9 @@ def create_app():
         db.create_all()
 
         print("Starting Iridium Package.")
-        IridiumManager()
+        IR = IridiumManager()
+        IR.ir.listen()
+        IR.SaveMessage()
         print("Iridium Package Started.")
 
         from SatComm.view import view
