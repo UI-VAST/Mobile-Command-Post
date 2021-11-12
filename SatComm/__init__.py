@@ -81,7 +81,9 @@ def create_app():
 
         print("Starting Iridium Package.")
         IR = IridiumManager()
+        print("Starting Listener.")
         IR.ir.listen()
+        print("Starting Saver.")
         IR.SaveMessage()
         print("Iridium Package Started.")
 
