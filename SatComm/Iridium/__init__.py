@@ -93,10 +93,12 @@ class Iridium:
                 self.csq()
             if self.LastMessage != "":
                 print("Received: " + self.LastMessage)
-                # hook_data = remove_spaces(hex_to_ascii(self.ir.LastMessage))
-                # data = Data("", float(hook_data[0]), float(hook_data[1]), float(hook_data[2]), float(hook_data[3]), hook_data[4] + " " + hook_data[5])
-                # db.session.add(data)
-                # db.session.commit()
+                # RB0012828 21.13 22.75 934.04 681.63 (46.733, -117.005)
+                # date_time, external_temp, internal_temp, pressure, altitude, gps
+                payload = remove_spaces(hex_to_ascii(self.LastMessage))
+                data = Data(payload[0], float(payload[1]), float(payload[2]), float(payload[3]), float(payload[4]), payload[5])
+                db.session.add(data)
+                db.session.commit()
                 self.LastMessage = ""
             time.sleep(1)
             self.countdown += 1
