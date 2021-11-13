@@ -1,9 +1,11 @@
 #!/usr/bin/python3
-import sys
+import sys, os
 import logging
 
 logging.basicConfig(stream=sys.stderr)
-sys.path.insert(0, "/var/www/Mobile-Command-Post/")
+sys.path.insert(0, "/var/www/Mobile-Command-Post/SatComm")
+
+print(os.getcwd())
 
 from SatComm import app as application
 application.secret_key = 'something super SUPER secret'
