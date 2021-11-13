@@ -134,13 +134,12 @@ class IridiumManager:
         self.sender = dest != 0
         self.ir = Iridium(self.port, self.baud, debug=debug)
         self.ir.logger.log("Send mode is {0}.".format("enabled" if self.sender else "disabled"))
-        # self.ir.listen()
-        # self.reader()
 
     def reader(self):
-        threading.Thread(target=self.SaveMessage()).start()
+        threading.Thread(target=self.SaveMessage).start()
 
     def SaveMessage(self):
+        self.ir.logger.log("Message Saver Started")
         while 1:
             # when transmissionTime seconds have passed, do the thing.
             # and reset countdown timer
