@@ -11,7 +11,7 @@ def timestamp():
 class Logger:
     def __init__(self, debug=False):
         self.debug = debug
-        self.logPath = os.path.join(os.getcwd(), 'log')
+        self.logPath = os.path.join("/var/www/Mobile-Command-Post/", 'log')
         if not os.path.exists(self.logPath):
             os.mkdir(self.logPath)
         self.logFile = os.path.join(self.logPath, 'log' + timestamp() + '.txt')

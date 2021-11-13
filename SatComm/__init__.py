@@ -80,9 +80,9 @@ def create_app():
         db.create_all()
 
         print("Starting Iridium Package.")
-        IR = IridiumManager()
+        # IR = IridiumManager()
         print("Starting Listener.")
-        IR.ir.listen()
+        # IR.ir.listen()
         # print("Starting Saver.")
         # IR.SaveMessage()
         print("Iridium Package Started.")
