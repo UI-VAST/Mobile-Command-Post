@@ -3,7 +3,7 @@ import configparser
 from flask import Flask
 from distutils.util import strtobool
 from SatComm.data_base import db, Data, create_database
-from SatComm.Iridium import IridiumManager
+from SatComm.Iridium import Iridium
 
 
 class EnvInterpolation(configparser.BasicInterpolation):
@@ -80,11 +80,12 @@ def create_app():
         db.create_all()
 
         print("Starting Iridium Package.")
-        IR = IridiumManager()
+        # IR = IridiumManager()
+        ir = Iridium()
         print("Starting Listener.")
-        IR.ir.listen()
-        print("Starting Saver.")
-        IR.SaveMessage()
+        ir.listen()
+        # print("Starting Saver.")
+        # IR.SaveMessage()
         print("Iridium Package Started.")
 
         from SatComm.view import view

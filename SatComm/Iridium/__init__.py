@@ -16,10 +16,17 @@ from SatComm.data_base import Data, db
 
 # Iridium class:
 class Iridium:
-    def __init__(self, port, baud, debug=False):
+    def __init__(self, dest=0, port="/dev/serial0", baud=19200, timer=120, debug=False):
+        self.transmissionTime = timer
+        self.countdown = 90
+        self.dest = "RB{0:07d}".format(dest)
+        self.port = port
+        self.baud = baud
+        self.sender = dest != 0
         self.logger = Logger(debug)
-        self.logger.log("Initiating Rock Block with " + str(port) + ", " + str(baud) + ", and debugging " + str(debug))
-        self.port = serial.Serial(port, baudrate=baud, timeout=5)
+        self.logger.log("Initiating Rock Block with " + str(self.port) + ", " + str(self.baud) + ", and debugging " + str(debug))
+        self.logger.log("Send mode is {0}.".format("enabled" if self.sender else "disabled"))
+        self.port = serial.Serial(self.port, baudrate=self.baud, timeout=5)
         self.port.reset_input_buffer()
         self.port.flush()
         self.write(bytes("AT+SBDREG\r\n", "utf-8"))
@@ -81,7 +88,18 @@ class Iridium:
                     temp = self.read()
                     r.append(temp.decode())
                 self.ProcessPacket(r)
+
+            if self.countdown % 30 == 0:
+                self.csq()
+            if self.LastMessage != "":
+                print("Received: " + self.LastMessage)
+                # hook_data = remove_spaces(hex_to_ascii(self.ir.LastMessage))
+                # data = Data("", float(hook_data[0]), float(hook_data[1]), float(hook_data[2]), float(hook_data[3]), hook_data[4] + " " + hook_data[5])
+                # db.session.add(data)
+                # db.session.commit()
+                self.LastMessage = ""
             time.sleep(1)
+            self.countdown += 1
 
     def ProcessPacket(self, packet):
         self.logger.log("packet:", packet)
@@ -124,34 +142,34 @@ class Iridium:
                 time.sleep(1)
 
 
-class IridiumManager:
-    def __init__(self, dest=0, port="/dev/serial0", baud=19200, timer=120, debug=False):
-        self.transmissionTime = timer
-        self.countdown = 90
-        self.dest = "RB{0:07d}".format(dest)
-        self.port = port
-        self.baud = baud
-        self.sender = dest != 0
-        self.ir = Iridium(self.port, self.baud, debug=debug)
-        self.ir.logger.log("Send mode is {0}.".format("enabled" if self.sender else "disabled"))
-
-    def reader(self):
-        threading.Thread(target=self.SaveMessage).start()
-
-    def SaveMessage(self):
-        self.ir.logger.log("Message Saver Started")
-        while 1:
-            # when transmissionTime seconds have passed, do the thing.
-            # and reset countdown timer
-            if self.countdown % 30 == 0:
-                self.ir.csq()
-            if self.ir.LastMessage != "":
-                print("Received: " + self.ir.LastMessage)
-                # hook_data = remove_spaces(hex_to_ascii(self.ir.LastMessage))
-                # data = Data("", float(hook_data[0]), float(hook_data[1]), float(hook_data[2]), float(hook_data[3]), hook_data[4] + " " + hook_data[5])
-                # db.session.add(data)
-                # db.session.commit()
-                self.ir.LastMessage = ""
-            time.sleep(1)
-            self.countdown += 1
+# class IridiumManager:
+#     def __init__(self, dest=0, port="/dev/serial0", baud=19200, timer=120, debug=False):
+#         self.transmissionTime = timer
+#         self.countdown = 90
+#         self.dest = "RB{0:07d}".format(dest)
+#         self.port = port
+#         self.baud = baud
+#         self.sender = dest != 0
+#         self.ir = Iridium(self.port, self.baud, debug=debug)
+#         self.ir.logger.log("Send mode is {0}.".format("enabled" if self.sender else "disabled"))
+#
+#     def reader(self):
+#         threading.Thread(target=self.SaveMessage).start()
+#
+#     def SaveMessage(self):
+#         self.ir.logger.log("Message Saver Started")
+#         while 1:
+#             # when transmissionTime seconds have passed, do the thing.
+#             # and reset countdown timer
+#             if self.countdown % 30 == 0:
+#                 self.ir.csq()
+#             if self.ir.LastMessage != "":
+#                 print("Received: " + self.ir.LastMessage)
+#                 # hook_data = remove_spaces(hex_to_ascii(self.ir.LastMessage))
+#                 # data = Data("", float(hook_data[0]), float(hook_data[1]), float(hook_data[2]), float(hook_data[3]), hook_data[4] + " " + hook_data[5])
+#                 # db.session.add(data)
+#                 # db.session.commit()
+#                 self.ir.LastMessage = ""
+#             time.sleep(1)
+#             self.countdown += 1
 
