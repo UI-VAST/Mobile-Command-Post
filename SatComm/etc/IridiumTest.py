@@ -1,4 +1,5 @@
 import serial
+import time
 
 port = "/dev/serial0"
 baud = 19200
@@ -11,6 +12,7 @@ inp = input("Command: ")
 while inp != 'exit':
     ir.write(bytes(inp, "utf-8"))
     while 1:
+        time.sleep(1)
         if ir.in_waiting:
             print("Checking...")
             while ir.in_waiting:
