@@ -10,7 +10,7 @@ ir.flush()
 print("Starting")
 inp = input("Command: ")
 while inp != 'exit':
-    ir.write(bytes(inp, "utf-8"))
+    ir.write(bytes(inp + "\r\n", "utf-8"))
     while 1:
         time.sleep(1)
         if ir.in_waiting:
