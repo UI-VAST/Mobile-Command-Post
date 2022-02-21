@@ -13,6 +13,8 @@ while inp != 'exit':
     while 1:
         if ir.in_waiting:
             while ir.in_waiting:
-                print(ir.readline().decode())
+                temp = ir.readline()
+                print(temp)
+                print(temp.decode())
             break
     inp = input()
