@@ -9,5 +9,10 @@ ir.flush()
 
 inp = input()
 while inp != 'exit':
-    ir.write(inp)
+    ir.write(bytes(inp))
+    while 1:
+        if ir.in_waiting():
+            while ir.in_waiting():
+                print(ir.readline().decode())
+            break
     inp = input()
