@@ -9,7 +9,7 @@ ir.flush()
 
 inp = input()
 while inp != 'exit':
-    ir.write(bytes(inp))
+    ir.write(bytes(inp, "utf-8"))
     while 1:
         if ir.in_waiting():
             while ir.in_waiting():
