@@ -7,7 +7,7 @@ uart = serial.Serial("/dev/serial0", 19200)
 
 rb = RockBlock(uart)
 
-print(rb.model)
+print(rb.status)
 
 # port = "/dev/serial0"
 # baud = 19200
